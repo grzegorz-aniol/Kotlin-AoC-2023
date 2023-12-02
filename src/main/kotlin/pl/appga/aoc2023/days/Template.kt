@@ -19,8 +19,9 @@ class Template : DayTask<Int>(999999) {
     }
 
     override val expectedTest1Result: Int = 999
-    override val expectedTest2Result: Int = 999
     override val expectedTask1Result: Int = 999
+
+    override val expectedTest2Result: Int = 999
     override val expectedTask2Result: Int = 999
 
 }

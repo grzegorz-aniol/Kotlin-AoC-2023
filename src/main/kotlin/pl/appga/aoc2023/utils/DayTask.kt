@@ -27,12 +27,13 @@ abstract class DayTask<T>(private val day: Int) {
         }
     }
 
-    private fun validate(actualResult: T, expectedResult: T) {
+    private fun validate(actualResult: T, expectedResult: T): Boolean {
         val status = when {
             actualResult == expectedResult -> "OK"
             else -> "FAIL"
         }
         println("status: $status, result: $actualResult, expected: $expectedResult")
+        return status == "OK"
     }
 
     private fun readTestFile(ver: String = "") =
@@ -45,7 +46,7 @@ abstract class DayTask<T>(private val day: Int) {
         InputStreamReader(this::class.java.getResource(filePath)!!.openStream())
             .readLines()
 
-    fun List<String>.toNumbers(): List<Int?> =
+    private fun List<String>.toNumbers(): List<Int?> =
         map {
             if (it.isBlank()) {
                 null
@@ -53,4 +54,6 @@ abstract class DayTask<T>(private val day: Int) {
                 Integer.parseInt(it)
             }
         }
+
+    private fun String.splitAndTrim(delimiters: String): List<String> = trim().split(delimiters).map { it.trim() }
 }
