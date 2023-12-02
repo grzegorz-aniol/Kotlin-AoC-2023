@@ -1,4 +1,4 @@
-package pl.appga.aoc2023.day01
+package pl.appga.aoc2023.days
 
 import pl.appga.aoc2023.utils.DayTask
 
