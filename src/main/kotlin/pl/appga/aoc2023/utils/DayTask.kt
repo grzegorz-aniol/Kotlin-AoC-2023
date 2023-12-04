@@ -12,7 +12,10 @@ abstract class DayTask<T>(private val day: Int) {
     abstract val expectedTask1Result: T
     abstract val expectedTask2Result: T
 
-    fun run(runTest1: Boolean = true, runTask1: Boolean = false, runTest2: Boolean = false, runTask2: Boolean = false) {
+    fun run(runTest1: Boolean = true,
+            runTask1: Boolean = false,
+            runTest2: Boolean = false, sameTestFileForTest2: Boolean = true,
+            runTask2: Boolean = false) {
         if (runTest1) {
             validate(solveTask1(readTestFile()), expectedTest1Result)
         }
@@ -20,7 +23,12 @@ abstract class DayTask<T>(private val day: Int) {
             validate(solveTask1(readTaskFile()), expectedTask1Result)
         }
         if (runTest2) {
-            validate(solveTask2(readTestFile(ver = "2")), expectedTest2Result)
+            val fileVersion = if (sameTestFileForTest2) {
+                ""
+            } else {
+                "2"
+            }
+            validate(solveTask2(readTestFile(ver = fileVersion)), expectedTest2Result)
         }
         if (runTask2) {
             validate(solveTask2(readTaskFile()), expectedTask2Result)
