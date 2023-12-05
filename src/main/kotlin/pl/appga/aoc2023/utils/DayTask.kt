@@ -16,22 +16,36 @@ abstract class DayTask<T>(private val day: Int) {
             runTask1: Boolean = false,
             runTest2: Boolean = false, sameTestFileForTest2: Boolean = true,
             runTask2: Boolean = false) {
+        var test1Result: Boolean? = null
         if (runTest1) {
-            validate(solveTask1(readTestFile()), expectedTest1Result)
+            println("Running test 1")
+            test1Result = validate(solveTask1(readTestFile()), expectedTest1Result)
         }
         if (runTask1) {
-            validate(solveTask1(readTaskFile()), expectedTask1Result)
+            if (test1Result == false) {
+                println("Skip running task1")
+            } else {
+                println("Running task 1")
+                validate(solveTask1(readTaskFile()), expectedTask1Result)
+            }
         }
+        var test2Result: Boolean? = null
         if (runTest2) {
             val fileVersion = if (sameTestFileForTest2) {
                 ""
             } else {
                 "2"
             }
-            validate(solveTask2(readTestFile(ver = fileVersion)), expectedTest2Result)
+            println("Running test 2")
+            test2Result = validate(solveTask2(readTestFile(ver = fileVersion)), expectedTest2Result)
         }
         if (runTask2) {
-            validate(solveTask2(readTaskFile()), expectedTask2Result)
+            if (test2Result == false) {
+                println("Skip running task2")
+            } else {
+                println("Running task 2")
+                validate(solveTask2(readTaskFile()), expectedTask2Result)
+            }
         }
     }
 
