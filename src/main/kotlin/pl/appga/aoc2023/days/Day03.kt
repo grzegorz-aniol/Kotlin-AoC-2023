@@ -4,6 +4,7 @@ import pl.appga.aoc2023.utils.Area
 import pl.appga.aoc2023.utils.DayTask
 import pl.appga.aoc2023.utils.Point
 import pl.appga.aoc2023.utils.contains
+import pl.appga.aoc2023.utils.mulOf
 
 fun main() {
     Day03().run(
@@ -75,9 +76,6 @@ class Day03 : DayTask<Int>(3) {
         }
         return Schema(lines)
     }
-
-    private fun <T> List<T>.mulOf(f: (T) -> Int): Int =
-        fold(1) { acc, it -> acc * f(it) }
 
     override val expectedTest1Result: Int = 4361
     override val expectedTask1Result: Int = 521515
