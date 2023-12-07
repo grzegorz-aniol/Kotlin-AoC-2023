@@ -9,19 +9,19 @@ fun main() {
     )
 }
 
-class Template : DayTask<Int>(999999) {
-    override fun solveTask1(inputFile: List<String>): Int {
+class Template : DayTask<Long>(999999) {
+    override fun solveTask1(inputFile: List<String>): Long {
         TODO("Not yet implemented")
     }
 
-    override fun solveTask2(inputFile: List<String>): Int {
+    override fun solveTask2(inputFile: List<String>): Long {
         TODO("Not yet implemented")
     }
 
-    override val expectedTest1Result: Int = 999
-    override val expectedTask1Result: Int = 999
+    override val expectedTest1Result: Long = 999
+    override val expectedTask1Result: Long = 999
 
-    override val expectedTest2Result: Int = 999
-    override val expectedTask2Result: Int = 999
+    override val expectedTest2Result: Long = 999
+    override val expectedTask2Result: Long = 999
 
 }
