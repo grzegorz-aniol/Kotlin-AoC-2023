@@ -1,24 +1,22 @@
 package pl.appga.aoc2023.days
 
-import kotlinx.coroutines.coroutineScope
 import pl.appga.aoc2023.utils.DayTask
+import pl.appga.aoc2023.utils.leastCommonMultiple
 
 fun main() {
     Day08().run(
-//        runTest1 = true,
-//        runTask1 = true,
+        runTest1 = true,
+        runTask1 = true,
         sameTestFileForTest2 = false,
-//        runTest2 = true,
+        runTest2 = true,
         runTask2 = true
     )
 }
 
 class Day08 : DayTask<Long>(8) {
 
-    private data class Node(val id: String, val leftId: String, val rightId: String) {
+    private data class Node(val id: String, val leftId: String, val rightId: String, val isStart: Boolean, val isEnd: Boolean) {
         var nodes: List<Node> = emptyList()
-        val isEnd: Boolean = id.endsWith("Z")
-        val isStart: Boolean = id.endsWith("A")
     }
 
     private data class Network(val directions: List<Int>, val nodes: List<Node>)
@@ -29,40 +27,27 @@ class Day08 : DayTask<Long>(8) {
     }
 
     override fun solveTask2(inputFile: List<String>): Long {
-        val network = inputFile.toNetwork()
+        val network = inputFile.toNetwork(startRule = { it.endsWith("A") }, endRule = { it.endsWith("Z") })
         return findWayOut(network, startingNodes = network.nodes.filter { it.isStart })
     }
 
-    private fun findWayOut(network: Network, startingNodes: List<Node>): Long {
-        var step = 0L
-        val nodes = startingNodes.toTypedArray()
-        var ts = System.currentTimeMillis()
-        var lastCnt = 0L
-        do {
-            val dir = network.directions[(step % network.directions.size).toInt()]
-            var found = 0
-            for ((index, node) in nodes.withIndex()) {
-                val nextNode = node.nodes[dir]
-                nodes[index] = nextNode
-                if (nextNode.isEnd) {
-                    ++found
+    private fun findWayOut(network: Network, startingNodes: List<Node>): Long =
+        startingNodes.map {
+            var node = it
+            var count = 0L
+            do {
+                network.directions.forEach { dir ->
+                    ++count
+                    node = node.nodes[dir]
                 }
-            }
-            ++step
-            if (found > 0) {
-                val newTs = System.currentTimeMillis()
-                if ((newTs - ts) > 5_000) {
-                    val speedPerSec = 1_000 * (step - lastCnt) / (newTs - ts)
-                    println("$step ${nodes.joinToString { it.id }} (speed: $speedPerSec)")
-                    ts = newTs
-                    lastCnt = step
-                }
-            }
-        } while (found != nodes.size)
-        return step
-    }
+            } while (!node.isEnd)
+            count
+        }.leastCommonMultiple()
 
-    private fun List<String>.toNetwork(): Network {
+    private fun List<String>.toNetwork(
+        startRule: (String) -> Boolean = { it == "AAA" },
+        endRule: (String) -> Boolean = { it == "ZZZ" }
+    ): Network {
         val regexIds = "[A-Z0-9]+".toRegex()
         val iter = iterator()
         val network = Network(
@@ -71,7 +56,7 @@ class Day08 : DayTask<Long>(8) {
                 .filter { it.isNotBlank() }
                 .map {
                     val (n1, n2, n3) = regexIds.findAll(it).map { it.value }.toList()
-                    Node(n1, n2, n3)
+                    Node(n1, n2, n3, startRule(n1), endRule(n1))
                 }.toList()
         )
         val nodesById = network.nodes.associateBy { it.id }
@@ -83,6 +68,6 @@ class Day08 : DayTask<Long>(8) {
     override val expectedTask1Result: Long = 16043
 
     override val expectedTest2Result: Long = 6
-    override val expectedTask2Result: Long = 999
+    override val expectedTask2Result: Long = 15726453850399
 
 }
