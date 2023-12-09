@@ -29,13 +29,14 @@ class Day09 : DayTask<Long>(9) {
     private suspend fun solve(report: List<History>, last: Boolean = true): Long = coroutineScope {
         report.map { h ->
             async {
-                var seq = h.numbers
-                val output = mutableListOf<List<Long>>()
-                do {
-                    output += seq
-                    seq = seq.diff()
-                } while (!seq.allZeros())
-                output.reversed().fold(0L) { acc, items ->
+                val seq = sequence {
+                    var nums = h.numbers
+                    do {
+                        yield(nums)
+                        nums = nums.diff()
+                    } while (!nums.allZeros())
+                }
+                seq.toList().foldRight(0L) { items, acc ->
                     if (last) {
                         items.last() + acc
                     } else {
