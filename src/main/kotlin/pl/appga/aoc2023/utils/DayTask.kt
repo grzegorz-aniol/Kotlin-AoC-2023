@@ -15,14 +15,15 @@ abstract class DayTask<T>(private val day: Int) {
     fun run(runTest1: Boolean = true,
             runTask1: Boolean = false,
             runTest2: Boolean = false, sameTestFileForTest2: Boolean = true,
-            runTask2: Boolean = false) {
+            runTask2: Boolean = false,
+            runTaskForFailedTest: Boolean = false) {
         var test1Result: Boolean? = null
         if (runTest1) {
             println("Running test 1")
             test1Result = validate(solveTask1(readTestFile()), expectedTest1Result)
         }
         if (runTask1) {
-            if (test1Result == false) {
+            if (!runTaskForFailedTest && test1Result == false) {
                 println("Skip running task1")
             } else {
                 println("Running task 1")
@@ -40,7 +41,7 @@ abstract class DayTask<T>(private val day: Int) {
             test2Result = validate(solveTask2(readTestFile(ver = fileVersion)), expectedTest2Result)
         }
         if (runTask2) {
-            if (test2Result == false) {
+            if (!runTaskForFailedTest && test2Result == false) {
                 println("Skip running task2")
             } else {
                 println("Running task 2")
