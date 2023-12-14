@@ -105,16 +105,13 @@ class Day14 : DayTask<Long>(14) {
     private fun floyd(sample: List<Long>): Pair<Int, Int>? {
         var p1 = 1
         var p2 = 2
-        do {
-            while (p2 < sample.size && ((p2 - p1 < 2) || sample[p1] != sample[p2])) {
-                p1 += 1
-                p2 += 2
-            }
-            if (p2 >= sample.size) {
-                return null
-            }
-            val allSame = true
-        } while (!allSame)
+        while (p2 < sample.size && ((p2 - p1 < 2) || sample[p1] != sample[p2])) {
+            p1 += 1
+            p2 += 2
+        }
+        if (p2 >= sample.size) {
+            return null
+        }
 
         var offset = 0
         p1 = 0
