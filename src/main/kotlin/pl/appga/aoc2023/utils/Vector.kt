@@ -1,5 +1,6 @@
 package pl.appga.aoc2023.utils
 
+import kotlin.math.abs
 import kotlin.math.sign
 
 data class Vector(val x: Int, val y: Int, val z: Int = 0) {
@@ -13,9 +14,25 @@ data class Vector(val x: Int, val y: Int, val z: Int = 0) {
         val E = Vector(1, 0)
         val W = Vector(-1, 0)
     }
-    fun inBoundary(range: Pair<OpenEndRange<Int>, OpenEndRange<Int>>): Boolean =
-        x in range.first && y in range.second
+
+    fun right() = when {
+        this == N -> E
+        this == E -> S
+        this == S -> W
+        this == W -> N
+        else -> this
+    }
+
+    fun left() = when {
+        this == N -> W
+        this == W -> S
+        this == S -> E
+        this == E -> N
+        else -> this
+    }
+
 }
 
 typealias Point = Vector
 
+fun Point.distanceTo(p: Point) = abs(p.x - x) + abs(p.y - y)
